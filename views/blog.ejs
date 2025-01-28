@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('./partials/head') %>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog</title>
+</head>
+<body>
+
+    <%- include('./partials/nav') %>
+
+    <div class="container mt-4">
+        <h2 class="container mt-4"><%= blog.title %></h2>
+        <img src="<%= blog.coverimage %>" width="700px"></img>
+        <pre class="container mt-4"><%= blog.content %> </pre>
+
+    </div>
+
+
+    <div class="container mt-4">
+        <img src="<%= blog.createdBy.profileimage  %>" width="50px" ><p><%= blog.createdBy.fullName %></p>
+
+    </div>
+
+    <div class="container mt-5">
+        <h3>Comments</h3>
+        <% if(locals.user){ %>
+            <form action="/blog/comment/<%= blog.id %>" method="post">
+            
+                <div class="mb-3">
+                    <label for="comment" class="form-label">Comment</label>
+                    <input type="text" name="comment" class="form-control" id="comment" placeholder="Enter your comment here">
+                    <button class="submit mt-2 btn btn-primary">Add</button>
+                </div>
+        </form>
+
+        <div class="mt-5">
+           <% comments.map( comment => {  %>
+
+                <div>
+                    <img src="<%= comment.createdBy.profileimage%>" width="50px">
+                    <p><%= comment.createdBy.fullName %></p>
+                    <pre><%= comment.content %></pre>
+                </div>
+
+
+           <% }); %> 
+        </div>
+
+
+        <% } %>
+    </div>
+
+   
+
+    <%- include('./partials/script') %> 
+    
+
+
+    
+
+</body>
+</html>
