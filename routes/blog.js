@@ -73,7 +73,7 @@ router.post('/', upload.single('coverimage'), async (req, res) => {
             return res.status(400).send("Error: Cover image is required.");
         }
 
-        
+        console.log("Hii") ;       
         console.log("user:>",req.user);
         const blog = await Blog.create({
             title,
