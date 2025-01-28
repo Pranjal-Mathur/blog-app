@@ -5,12 +5,17 @@ const app = express();
 const userRoute = require('./routes/user.js');
 const blogRoute = require('./routes/blog.js');
 const Blog = require('./models/blog');
-
+const cors = require('cors');
 
 const db = require('./db.js');
 const { checkforcookie } = require('./middlewares/authentication.js');
 
 const PORT = process.env.PORT || 8080;
+
+app.use(cors({
+    origin: '*', // For development, use specific origins for production
+    credentials: true
+}));
 
 app.use(express.json());
 app.use(express.urlencoded({extended : false}));
