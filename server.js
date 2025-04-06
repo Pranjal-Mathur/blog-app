@@ -20,33 +20,22 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({extended : false}));
 app.use(cookieParser());
-app.use(checkforcookie("token"));
 app.use(express.static(path.resolve('./public')));
 
 app.set("view engine","ejs");
 app.set("views",path.resolve('./views'));
 
-app.use('/user',userRoute);
-app.use('/blog',blogRoute);
-
-app.get("/",async (req,res)=>{
-    
-    console.log("Hello",req.user);
+// Apply authentication middleware only to specific routes
+app.use('/user', checkforcookie("token"), userRoute);
+app.use('/blog', checkforcookie("token"), blogRoute);
+app.get("/", checkforcookie("token"), async (req,res)=>{
     const allBlogs = await Blog.find({});
     res.render('home.ejs',{
         user:req.user,
         blogs:allBlogs
     });
-
-    
-})
-
-
-
-
-
-
+});
 
 app.listen(PORT,()=>{
     console.log(`Server started at ${PORT}`);
-})
+});
