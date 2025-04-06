@@ -1,33 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <%- include('./partials/head') %>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
+    <title>Blog - Home</title>
+    <%- include('./partials/head') %>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .blog-card {
+            height: 450px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            background: white;
+        }
+        .blog-card img {
+            height: 200px;
+            object-fit: cover;
+        }
+        .card-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+        }
+        .card-title {
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        .card-text {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            line-height: 1.5;
+            word-wrap: break-word;
+            margin-bottom: 1rem;
+        }
+        .btn-container {
+            margin-top: auto;
+        }
+    </style>
 </head>
 <body>
-    <%- include('./partials/script') %> 
-    
     <%- include('./partials/nav') %>
 
-    <div class="container mt-3">
-      <div class="row row-cols-3">
-        <div class="col">
-        <% blogs.forEach(blog=> {%>
-        <div class="card col" style="width: 18rem;">
-            <img src="<%= blog.coverimage %>" class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title"><%= blog.title %></h5>
-              <p class="card-text"><%= blog.content %></p>
-              <a href="/blog/<%= blog._id%>" class="btn btn-primary">View</a>
-            </div>
-          </div>
+    <div class="container">
+        <div class="page-header">
+            <h1>Welcome to Our Blog</h1>
+            <p>Discover interesting stories and share your thoughts with our community</p>
         </div>
-          <% }) %>
+
+        <div class="row g-4">
+            <% if (blogs.length === 0) { %>
+                <div class="col-12 text-center">
+                    <p>No blogs posted yet. Be the first to share your story!</p>
+                    <% if (user) { %>
+                        <a href="/blog/add" class="btn btn-primary mt-3">Create Blog</a>
+                    <% } %>
+                </div>
+            <% } else { %>
+                <% blogs.forEach(blog => { %>
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="blog-card">
+                            <img src="<%= blog.coverimage %>" class="card-img-top" alt="<%= blog.title %>">
+                            <div class="card-body">
+                                <h5 class="card-title"><%= blog.title %></h5>
+                                <p class="card-text"><%= blog.content.length > 200 ? blog.content.substring(0, 200) + '...' : blog.content %></p>
+                                <div class="btn-container">
+                                    <a href="/blog/<%= blog._id %>" class="btn btn-primary">Read More</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } %>
+        </div>
+
+        <% if (user) { %>
+            <div class="text-center mt-5 mb-3">
+                <a href="/blog/add" class="btn btn-primary btn-lg">Create New Blog</a>
+            </div>
+        <% } %>
     </div>
 
-    
-
+    <%- include('./partials/script') %>
 </body>
 </html>
